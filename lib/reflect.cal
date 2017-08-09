@@ -1,0 +1,15 @@
+{
+	Calculations for illumination reflected from fluorescent troughers.
+	Lamp must be along a main axis, and is assumed to be infinite.
+	The output of the lamp (in watts per meter) is multiplied to get
+	irradiance.
+
+	A1 =		Distance from lamp to plane of reflector
+	A2, A3 =	Axis positions for lamp
+
+	all values are in inches, hence the conversion to meters
+}
+
+xreflect = 39.4*A1/((Py-A2)*(Py-A2) + (Pz-A3)*(Pz-A3));
+yreflect = 39.4*A1/((Px-A2)*(Px-A2) + (Pz-A3)*(Pz-A3));
+zreflect = 39.4*A1/((Px-A2)*(Px-A2) + (Py-A3)*(Py-A3));

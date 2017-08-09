@@ -1,0 +1,11 @@
+{
+	Texture Function for Obsidian (conchoidal fracturing)
+
+	A1 = scale limit
+
+	04Mar90
+}
+
+conch_x = turbulencea(Px, Py, Pz, A1);
+conch_y = turbulenceb(Px, Py, Pz, A1);
+conch_z = turbulencec(Px, Py, Pz, A1);

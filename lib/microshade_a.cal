@@ -1,0 +1,111 @@
+{
+        microshade.cal 
+	calculates the angular transmission of "Microshade A" 
+	based on transmission-fit function dependend on alpha,gamma
+	
+	result variable=trans 
+	
+	A1: rotation angle around nornal vector axis 
+	
+	
+	Aug 19th 2011 by J. Wienold
+	Fraunhofer ISE
+	jan.wienold@ise.fraunhofer.de
+}
+{parametes, beta=A1 in radiant}
+
+
+a= 0.208272447;
+b= 0.096422425;
+c= 0.090899412;
+d= -0.16504438;
+e= -0.09996836;
+f= 0.02534436;
+g= -0.00059369;
+h= -0.30435382;
+i= 0.104386715;
+j= -0.02808938;
+k= 0.003690361;
+l= -0.10833475;
+m= 0.168636038;
+n= -0.07662185;
+o= 0.02293331;
+p= 0.011229799;
+q= -0.12506325;
+r= 0.073478099;
+s= -0.08115326;
+t= 0.046715702;
+u= -0.01583758;
+v= 0.004844087;
+aa= -0.03752544;
+ab= 0.038026028;
+ac= -0.04783101;
+ad= 0.033085743;
+ae= -0.02502539;
+af= 0.009996785;
+ag= -0.00156617;
+ah= -0.02889406;
+ai= 0.024011751;
+aj= -0.0025773;
+ak= 0.021928989;
+al= -0.0129991;
+am= 0.010108116;
+an= -0.00539316;
+ao= 0.000269416;
+ap= -0.01489743;
+aq= 0.001187895;
+ar= -0.00718312;
+as= -0.00238022;
+at= -0.00911581;
+au= 0.002825874;
+av= -0.00384415;
+ba= 0.002899365;
+
+
+
+beta=-A1*PI/180;
+
+{coordinate transformation into local system x,y,z system ->dd}
+Z(i)=select(i, 0, 0, 1);
+
+X(i)=cross(i,N,Z);
+X2(i)=X(i)/(Sqrt(dot(X,X)));
+
+{if surface is horizontal, set up vector into -x-direction}
+X1(i)=if(Nx*Nx+Ny*Ny,X2(i),select(i, -1, 0,0));
+
+
+Z2(i)=cross(i,X1,N);
+Z1(i)=Z2(i)/(Sqrt(dot(Z2,Z2)));
+
+dd1=X1(1)*D(1)+X1(2)*D(2)+X1(3)*D(3);
+dd2=N(1)*D(1)+N(2)*D(2)+N(3)*D(3);
+dd3=Z1(1)*D(1)+Z1(2)*D(2)+Z1(3)*D(3);
+
+{rotation of the system, given by A1}
+
+dd1_rot=dd1*cos(beta)+dd3*sin(beta);
+dd3_rot=dd3*cos(beta)-dd1*sin(beta);
+
+{calculation of alpha and gamma angle, gamma is symmetrical ->abs, factor 2 comes from fit function}
+
+alpha1=asin(dd3_rot);
+
+gamma=2*abs(asin(dd1_rot/(cos(alpha1))));
+
+
+{if ray hits frontside, then mirrow the alpha property}
+alpha=if(Rdot,-alpha1+PI/2,alpha1+PI/2);
+
+
+{transmission fit equation}
+trans1=a+b*cos(alpha)+c*cos(gamma)+d*cos(2*alpha)+e*cos(alpha)*cos(gamma)+f*cos(2*gamma)+g*cos(3*alpha)+h*cos(2*alpha)*cos(gamma)+i*cos(alpha)*cos(2*gamma)+j*cos(3*gamma)+k*cos(4*alpha)+l*cos(3*alpha)*cos(gamma)+m*cos(2*alpha)*cos(2*gamma)+n*cos(alpha)*cos(3*gamma)+o*cos(4*gamma)+p*cos(5*alpha)+q*cos(4*alpha)*cos(gamma)+r*cos(3*alpha)*cos(2*gamma)+s*cos(2*alpha)*cos(3*gamma)+t*cos(alpha)*cos(4*gamma)+u*cos(5*gamma)+v*cos(6*alpha)+aa*cos(5*alpha)*cos(gamma)+ab*cos(4*alpha)*cos(2*gamma)+ac*cos(3*alpha)*cos(3*gamma)+ad*cos(2*alpha)*cos(4*gamma)+ae*cos(alpha)*cos(5*gamma)+af*cos(6*gamma)+ag*cos(7*alpha)+ah*cos(6*alpha)*cos(gamma)+ai*cos(5*alpha)*cos(2*gamma)+aj*cos(4*alpha)*cos(3*gamma)+ak*cos(3*alpha)*cos(4*gamma)+al*cos(2*alpha)*cos(5*gamma)+am*cos(alpha)*cos(6*gamma)+an*cos(7*gamma)+ao*cos(8*alpha)+ap*cos(7*alpha)*cos(gamma)+aq*cos(6*alpha)*cos(2*gamma)+ar*cos(5*alpha)*cos(3*gamma)+as*cos(4*alpha)*cos(4*gamma)+at*cos(3*alpha)*cos(5*gamma)+au*cos(2*alpha)*cos(6*gamma)+av*cos(alpha)*cos(7*gamma)+ba*cos(8*gamma);
+
+{alpha and gamma angles >80 -> trans=0}
+rr=Sqrt(alpha1*alpha1+(gamma*gamma/4));
+
+
+trans2=if(80/180*PI-rr,trans1,0);
+
+trans=if(trans2,trans2,0);
+

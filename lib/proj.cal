@@ -1,0 +1,34 @@
+{
+	proj.cal - calculate image projection vector
+}
+				{ View Point }
+VPx = 0; VPy = 0; VPz = 0;
+				{ View Up }
+VUx = 0; VUy = 0; VUz = 1;
+				{ View Direction }
+VDx = 0; VDy = 1; VDz = 0;
+				{ View Horizontal and Vertical angles }
+VH = 45; VV = 45;
+				{ X and Y resolution }
+X = 512; Y = 512;
+				{ Projected Direction (computed) }
+PDx = NVDx + h*IHx + v*IVx;
+PDy = NVDy + h*IHy + v*IVy;
+PDz = NVDz + h*IHz + v*IVz;
+h = x - (X-1)/2; v = y - (Y-1)/2;
+				{ Normalized View Direction }
+NVDx = VDx/VDl; NVDy = VDy/VDl; NVDz = VDz/VDl;
+VDl = sqrt(VDx*VDx + VDy*VDy + VDz*VDz);
+				{ Increment Horizontal }
+IHx = IHF*NTIHx; IHy = IHF*NTIHy; IHz = IHF*NTIHz;
+NTIHx = TIHx/TIHl; NTIHy = TIHy/TIHl; NTIHz = TIHz/TIHl;
+TIHx = VDy*VUz-VDz*VUy; TIHy = VDz*VUx-VDx*VUz; TIHz = VDx*VUy-VDy*VUx;
+TIHl = sqrt(TIHx*TIHx + TIHy*TIHy + TIHz*TIHz);
+IHF = 2*tan(PI/180/2*VH)/X;
+				{ Increment Vertical }
+IVx = IVF*(NTIHy*NVDz-NTIHz*NVDy);
+IVy = IVF*(NTIHz*NVDx-NTIHx*NVDz);
+IVz = IVF*(NTIHx*NVDy-NTIHy*NVDx);
+IVF = 2*tan(PI/180/2*VV)/Y;
+
+PI = 3.14159265358979323846;

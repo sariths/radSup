@@ -1,0 +1,10 @@
+{
+	Cloudy noise function
+
+	A1, A2, A3 - color to change to from white
+}
+noise_v = .5 + .5*fnoise3(Px,Py,Pz);
+
+red_cl = noise_v*A1 + (1-noise_v);
+grn_cl = noise_v*A2 + (1-noise_v);
+blu_cl = noise_v*A3 + (1-noise_v);

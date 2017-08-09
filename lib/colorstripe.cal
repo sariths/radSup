@@ -1,0 +1,13 @@
+{
+	colorstripe.cal - calculation for stripes of color.
+
+	A1, A2, A3 - stripe direction vector over width
+	A4, A5, A6 - first color
+	A7, A8, A9 - second color
+}
+
+stripe_red = if( stripe1, A4, A7 );
+stripe_grn = if( stripe1, A5, A8 );
+stripe_blu = if( stripe1, A6, A9 );
+
+stripe1 = frac( A1*Px + A2*Py + A3*Pz ) - .5;

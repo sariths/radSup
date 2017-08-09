@@ -1,0 +1,1 @@
+This perl installation has shown to work with Windows.

@@ -1,0 +1,10 @@
+{
+	tile.cal - function for simple square tiling pattern
+			on horizontal surface.
+	
+	A1 is square size.
+}
+
+tile = fade( f_tile(frac(Px/A1),frac(Pz/A1)), 0.7, T/A1/5 );
+
+f_tile(m1,m2) = if( and(m1-.1,m2-.1), 1, .1 );
